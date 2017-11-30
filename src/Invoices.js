@@ -33,7 +33,7 @@ class Invoices extends Component {
       <div>
         <h2>Invoices</h2>
         {this.state.invoices.map(function(invoice, i) {
-          return <Invoices name={invoice.name} key={i} />;
+          return <Invoice name={invoice.name} key={i} />;
         })}
       </div>
     );

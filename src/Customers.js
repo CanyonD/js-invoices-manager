@@ -1,13 +1,36 @@
 import React, { Component } from "react";
 import axios from "axios";
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn
+} from "material-ui/Table";
 
 let Customer = function(props) {
   return (
-    <div className="customer">
-      <div>
-        Name: {props.name}
-      </div>
-    </div>
+    <TableRow>
+      <TableRowColumn>
+        {props.customer.id}
+      </TableRowColumn>
+      <TableRowColumn>
+        {props.customer.name}
+      </TableRowColumn>
+      <TableRowColumn>
+        {props.customer.phone}
+      </TableRowColumn>
+      <TableRowColumn>
+        {props.customer.address}
+      </TableRowColumn>
+      <TableRowColumn>
+        {props.customer.createdAt}
+      </TableRowColumn>
+      <TableRowColumn>
+        {props.customer.updatedAt}
+      </TableRowColumn>
+    </TableRow>
   );
 };
 
@@ -32,9 +55,23 @@ class Customers extends Component {
     return (
       <div>
         <h2>Customers</h2>
-        {this.state.customers.map(function(customer, i) {
-          return <Customer name={customer.name} key={i} />;
-        })}
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHeaderColumn>ID</TableHeaderColumn>
+              <TableHeaderColumn>Name</TableHeaderColumn>
+              <TableHeaderColumn>Phone</TableHeaderColumn>
+              <TableHeaderColumn>Address</TableHeaderColumn>
+              <TableHeaderColumn>Added</TableHeaderColumn>
+              <TableHeaderColumn>Updated</TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {this.state.customers.map(function(customer) {
+              return <Customer customer={customer} key={customer.id} />;
+            })}
+          </TableBody>
+        </Table>
       </div>
     );
   }

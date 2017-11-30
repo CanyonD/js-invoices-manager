@@ -8,17 +8,26 @@ import {
   NavLink
 } from "react-router-dom";
 import createBrowserHistory from "history/createBrowserHistory";
+import MuiThemeProvider     from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import getMuiTheme          from 'material-ui/styles/getMuiTheme';
 
-import Products from "./Products";
-import Customers from "./Customers";
-import Invoices from "./Invoices";
+import Products   from "./Products";
+import Customers  from "./Customers";
+import Invoices   from "./Invoices";
 
 const customHistory = createBrowserHistory();
 
+const muiTheme = getMuiTheme({ userAgent: false });
+
 class App extends Component {
+  componentDidMount() {
+    injectTapEventPlugin();
+  }
   render() {
     return (
       <Router history={customHistory}>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <div className="App">
           <nav className="navbar navbar-default navbar-static-top">
             <div className="container">
@@ -49,6 +58,7 @@ class App extends Component {
           <Route exact path="/customers" component={Customers} />
           <Route exact path="/invoices" component={Invoices} />
         </div>
+        </MuiThemeProvider>
       </Router>
     );
   }
