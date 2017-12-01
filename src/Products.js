@@ -1,35 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
+import Grid from "./Grid";
 
-let Product = function(props) {
-  return (
-    <TableRow>
-      <TableRowColumn key={`trc--id-${props.product.id}`}>
-        {props.product.id}
-      </TableRowColumn>
-      <TableRowColumn key={`trc--name-${props.product.name}`}>
-        {props.product.name}
-      </TableRowColumn>
-      <TableRowColumn key={`trc--price-${props.product.price}`}>
-        {props.product.price}
-      </TableRowColumn>
-      <TableRowColumn key={`trc--createdAt-${props.product.createdAt}`}>
-        {props.product.createdAt}
-      </TableRowColumn>
-      <TableRowColumn key={`trc--updatedAt-${props.product.updatedAt}`}>
-        {props.product.updatedAt}
-      </TableRowColumn>
-    </TableRow>
-  );
-};
+let model = [
+  { name: "ID", prop: "id" },
+  { name: "Name", prop: "name" },
+  { name: "Price", prop: "price" },
+  { name: "Added", prop: "createdAt" },
+  { name: "Updated", prop: "updatedAt" }
+];
 
 class Products extends Component {
   constructor(props) {
@@ -37,6 +16,25 @@ class Products extends Component {
     this.state = {
       products: []
     };
+    this.render = this.render.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleEdit = this.handleRemove.bind(this);
+  }
+
+  handleEdit(params) {
+    console.log("handleEdit: ", params);
+    console.log("this: ", this);
+    console.log(arguments);
+    // this.props.history.push("/product/1");
+
+    window.location.href = "/product/1";
+  }
+
+  handleRemove(params) {
+    console.log("handleRemove: ", params);
+    console.log("this: ", this);
+    console.log(arguments);
   }
 
   componentDidMount() {
@@ -48,26 +46,16 @@ class Products extends Component {
   }
 
   render() {
-    console.log(this.state.products);
+    console.log(this);
     return (
       <div>
         <h2>Products</h2>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderColumn key="th-ID">ID</TableHeaderColumn>
-              <TableHeaderColumn key="th-Name">Name</TableHeaderColumn>
-              <TableHeaderColumn key="th-Price">Price</TableHeaderColumn>
-              <TableHeaderColumn key="th-Added">Added</TableHeaderColumn>
-              <TableHeaderColumn key="th-Updated">Updated</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {this.state.products.map(function(product, i) {
-              return <Product product={product} key={product.id} />;
-            })}
-          </TableBody>
-        </Table>
+        <Grid
+          header={model}
+          data={this.state.products}
+          handleEdit={this.handleEdit}
+          handleRemove={this.handleRemove}
+        />
       </div>
     );
   }

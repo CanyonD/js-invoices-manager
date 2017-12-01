@@ -1,38 +1,22 @@
 import React, { Component } from "react";
 import axios from "axios";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
+import Grid from "./Grid";
 
-let Customer = function(props) {
-  return (
-    <TableRow>
-      <TableRowColumn>
-        {props.customer.id}
-      </TableRowColumn>
-      <TableRowColumn>
-        {props.customer.name}
-      </TableRowColumn>
-      <TableRowColumn>
-        {props.customer.phone}
-      </TableRowColumn>
-      <TableRowColumn>
-        {props.customer.address}
-      </TableRowColumn>
-      <TableRowColumn>
-        {props.customer.createdAt}
-      </TableRowColumn>
-      <TableRowColumn>
-        {props.customer.updatedAt}
-      </TableRowColumn>
-    </TableRow>
-  );
-};
+let model = [
+  { name: "ID", prop: "id" },
+  { name: "Name", prop: "name" },
+  { name: "Phone", prop: "phone" },
+  { name: "Address", prop: "address" },
+  { name: "Added", prop: "createdAt" },
+  { name: "Updated", prop: "updatedAt" }
+];
+
+function handleEdit(params) {
+  console.log("handleEdit: ", params);
+}
+function handleRemove(params) {
+  console.log("handleRemove: ", params);
+}
 
 class Customers extends Component {
   constructor(props) {
@@ -51,27 +35,16 @@ class Customers extends Component {
   }
 
   render() {
-    console.log(this.state.customers);
+    // console.log(this.state.customers);
     return (
       <div>
         <h2>Customers</h2>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderColumn>ID</TableHeaderColumn>
-              <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Phone</TableHeaderColumn>
-              <TableHeaderColumn>Address</TableHeaderColumn>
-              <TableHeaderColumn>Added</TableHeaderColumn>
-              <TableHeaderColumn>Updated</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {this.state.customers.map(function(customer) {
-              return <Customer customer={customer} key={customer.id} />;
-            })}
-          </TableBody>
-        </Table>
+        <Grid
+          header={model}
+          data={this.state.customers}
+          handleEdit={handleEdit}
+          handleRemove={handleRemove}
+        />
       </div>
     );
   }
