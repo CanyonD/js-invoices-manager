@@ -10,7 +10,8 @@ import Products from "./Products";
 import Product from "./Product";
 import Customers from "./Customers";
 import Invoices from "./Invoices";
-// import NotFound from "./NotFound";
+import Invoice from "./Invoice";
+import NotFound from "./NotFound";
 
 import createBrowserHistory from "history/createBrowserHistory";
 
@@ -42,7 +43,7 @@ class App extends Component {
                       <NavLink to="/customers">Customers</NavLink>
                     </li>
                     <li>
-                      <NavLink exact to="/invoices">
+                      <NavLink exact to="/invoice/0">
                         Invoices
                       </NavLink>
                     </li>
@@ -50,12 +51,13 @@ class App extends Component {
                 </div>
               </div>
             </nav>
-            <Route exact path="/" component={Products} />
+            <Route exact path="/" component={Invoices} />
             <Route exact path="/products" component={Products} />
             <Route exact path="/product/:id" component={Product} />
             <Route exact path="/customers" component={Customers} />
             <Route exact path="/invoices" component={Invoices} />
-            {/* <Route exact path="*" component={NotFound} /> */}
+            <Route exact path="/invoice/:id" component={Invoice} />
+            <Route path="*" component={NotFound} status={404} />
           </div>
         </MuiThemeProvider>
       </Router>

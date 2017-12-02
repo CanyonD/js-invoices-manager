@@ -11,19 +11,23 @@ let model = [
   { name: "Updated", prop: "updatedAt" }
 ];
 
-function handleEdit(params) {
-  console.log("handleEdit: ", params);
-}
-function handleRemove(params) {
-  console.log("handleRemove: ", params);
-}
-
 class Customers extends Component {
   constructor(props) {
     super(props);
     this.state = {
       customers: []
     };
+    this.render = this.render.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleEdit = this.handleRemove.bind(this);
+  }
+
+  handleEdit(params) {
+    console.log("handleEdit: ", params);
+  }
+  handleRemove(params) {
+    console.log("handleRemove: ", params);
   }
 
   componentDidMount() {
@@ -42,8 +46,8 @@ class Customers extends Component {
         <Grid
           header={model}
           data={this.state.customers}
-          handleEdit={handleEdit}
-          handleRemove={handleRemove}
+          handleEdit={this.handleEdit}
+          handleRemove={this.handleRemove}
         />
       </div>
     );
