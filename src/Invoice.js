@@ -10,13 +10,13 @@ class Invoice extends Component {
       discount: 0,
       total: 0,
       items: [
-        {
-          id: 1,
-          product_id: 1,
-          product_name: "Bomba",
-          price: 5,
-          quantity: 2
-        }
+        // {
+        //   id: 1,
+        //   product_id: 1,
+        //   product_name: "Bomba",
+        //   price: 5,
+        //   quantity: 2
+        // }
       ],
       products: []
     };
@@ -64,6 +64,7 @@ class Invoice extends Component {
   }
 
   render() {
+    console.log('render', this)
     return (
       <div>
         {this.id === 0

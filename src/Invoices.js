@@ -3,6 +3,10 @@ import axios from "axios";
 import Grid from "./Grid";
 import Invoice from "./Invoice";
 
+const removeButtonStyle = {
+  margin: "0"
+};
+
 let model = [
   { name: "ID", prop: "id" },
   { name: "Customer", prop: "customer" },
@@ -24,14 +28,14 @@ class Invoices extends Component {
     this.handleEdit = this.handleRemove.bind(this);
   }
   handleEdit(params) {
-    console.log("handleEdit: ", params);
-    console.log("this: ", this);
+    console.log("handleEdit", params);
+    console.log("this", this);
     console.log(arguments);
   }
 
   handleRemove(params) {
-    console.log("handleRemove: ", params);
-    console.log("this: ", this);
+    console.log("handleRemove", params);
+    console.log("this", this);
     console.log(arguments);
   }
   componentDidMount() {
@@ -52,9 +56,18 @@ class Invoices extends Component {
   }
 
   render() {
-    console.log('render', this);
+    console.log("render", this);
     return (
       <div>
+        <button
+          className="btn btn-success"
+          style={removeButtonStyle}
+          onClick={() => {
+            this.props.history.push("/invoice/0");
+          }}
+        >
+          Add new invoice
+        </button>
         {this.state.invoices.length === 0
           ? <Invoice />
           : <Grid

@@ -7,14 +7,36 @@ const removeButtonStyle = {
 class TableItemsInvoice extends Component {
   constructor(props) {
     super(props);
-    this.state = this.props.props.state;
+    this.state = this.props.state;
     this.addItem = this.addItem.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
     this.handleChangeQuantity = this.handleChangeQuantity.bind(this);
     console.log("constructor", this);
   }
 
+  componentWillMount() {
+    console.log("componentWillMount", this);
+  }
+  componentDidMount() {
+    console.log("componentDidMount", this);
+  }
+  queryChange(evt) {
+    console.log("queryChange", this, evt);
+  }
+
   addItem() {
     console.log("addItem", this);
+    this.setState({
+      items: [
+        {
+          id: 1,
+          product_id: 1,
+          product_name: "Bomba",
+          price: 0,
+          quantity: 1
+        }
+      ]
+    });
   }
 
   handleChangeQuantity(event, item, row) {
@@ -41,13 +63,16 @@ class TableItemsInvoice extends Component {
               <th className="text-center">Price</th>
               <th className="text-center">Quantity</th>
               <th style={{ width: "100px" }}>
-                <button
-                  className="btn btn-success"
-                  style={removeButtonStyle}
-                  onClick={this.addItem}
-                >
-                  Add product
-                </button>
+                <section>
+                  <button
+                    className="btn btn-success"
+                    style={removeButtonStyle}
+                    key={"addItem"}
+                    onClick={this.addItem}
+                  >
+                    Add product
+                  </button>
+                </section>
               </th>
             </tr>
           </thead>

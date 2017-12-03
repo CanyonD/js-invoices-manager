@@ -6,12 +6,17 @@ import TableItemsInvoice from "./TableItemsInvoice";
 
 class NewInvoice extends Component {
   constructor(props) {
+    console.log("super constructor", props);
     super(props);
     this.state = this.props.state;
+    // this.props = this.props.props;
+    this.render = this.render.bind(this);
+    // this.componentDidMount = this.componentDidMount.bind(this);
     console.log("constructor", this);
   }
 
   render() {
+    console.log("render", this);
     return (
       <div>
         <form className="form-horizontal">
@@ -21,7 +26,7 @@ class NewInvoice extends Component {
                 className={"col-md-4 control-label "}
                 tooltip="Back to list"
                 onClick={() => {
-                  arguments[0].props.history.push("/invoices");
+                  this.props.props.history.push("/invoices");
                 }}
               >
                 <BackIcon />
@@ -53,7 +58,7 @@ class NewInvoice extends Component {
             </div>
           </fieldset>
           <TableItemsInvoice
-            props={this.props}
+            props={this.props.props}
             state={this.state}
             handleRemoveClick={this.handleRemoveClick}
           />

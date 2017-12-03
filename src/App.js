@@ -51,7 +51,7 @@ class App extends Component {
                 </div>
               </div>
             </nav>
-            <Route exact path="/" component={Invoices} />
+            {/* <Route exact path="/" component={Invoices} /> */}
             <Route exact path="/products" component={Products} />
             <Route exact path="/product/:id" component={Product} />
             <Route exact path="/customers" component={Customers} />

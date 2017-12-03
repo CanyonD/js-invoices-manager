@@ -12,7 +12,7 @@ import RemoveIcon from "material-ui/svg-icons/action/delete";
 
 function row(x, i, header, handleEdit, handleRemove) {
   return (
-    <TableRow key={`tr-${i}`} onClick={() => handleEdit(i)}>
+    <TableRow key={`tr-${i}`}>
       {header.map(
         (y, k) =>
         y.prop === "id"
@@ -23,10 +23,10 @@ function row(x, i, header, handleEdit, handleRemove) {
                 {x[y.prop]}
               </TableRowColumn>
       )}
-      <TableRowColumn style={{ width: 60 }}>
+      <TableRowColumn key={`tr-edit-${i}`} style={{ width: 60 }}>
         <EditIcon onClick={() => handleEdit(i)} />
       </TableRowColumn>
-      <TableRowColumn style={{ width: 60 }}>
+      <TableRowColumn key={`tr-remove-${i}`} style={{ width: 60 }}>
         <RemoveIcon onClick={() => handleRemove(i)} />
       </TableRowColumn>
     </TableRow>
@@ -49,8 +49,8 @@ function Grid(props) {
                     {x.name}
                   </TableHeaderColumn>
           )}
-          <TableHeaderColumn style={{ width: 60 }} />
-          <TableHeaderColumn style={{ width: 60 }} />
+          <TableHeaderColumn key={`thc-edit`} style={{ width: 60 }} />
+          <TableHeaderColumn key={`thc-remove`} style={{ width: 60 }} />
         </TableRow>
       </TableHeader>
       <TableBody displayRowCheckbox={false}>
