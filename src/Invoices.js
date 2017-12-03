@@ -52,7 +52,7 @@ class Invoices extends Component {
   }
 
   render() {
-    console.log(this.state.invoices);
+    console.log('render', this);
     return (
       <div>
         {this.state.invoices.length === 0

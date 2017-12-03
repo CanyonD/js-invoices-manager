@@ -1,16 +1,12 @@
 import React, { Component } from "react";
-import DropDownMenu from "material-ui/DropDownMenu";
-import MenuItem from "material-ui/MenuItem";
 import axios from "axios";
 
-// const styles = {
-//   customWidth: {
-//     width: 200
-//   }
-// };
-
-function row(x, i) {
-  return <MenuItem key={`ddm-i-${i}`} value={i} primaryText={x.name} />;
+function row(x, i, handleChange) {
+  return (
+    <option key={`ddm-i-${i}`} value={i} onChange={handleChange}>
+      {" "}{x.name}{" "}
+    </option>
+  );
 }
 
 export default class DropDownMenuCustomers extends Component {
@@ -37,14 +33,11 @@ export default class DropDownMenuCustomers extends Component {
 
   render() {
     return (
-      <DropDownMenu
-        value={this.state.value}
-        onChange={this.handleChange}
-        autoWidth={false}
-        className={"col-md-4"}
-      >
-        {this.state.data.map(row)}
-      </DropDownMenu>
+      <div className="col-md-3">
+        <select className="form-control" id="sel1">
+          {this.state.data.map((x, y) => row(x, y, this.handleChange))}
+        </select>
+      </div>
     );
   }
 }

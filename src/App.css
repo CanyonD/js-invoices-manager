@@ -1,4 +1,4 @@
-.App {
+.App h2{
   text-align: center;
 }
 
@@ -30,4 +30,14 @@
 .active {
   color: #555;
   background-color: #e7e7e7;
+}
+
+table td {
+  vertical-align: middle !important;
+}
+
+.form-horizontal .form-group {
+  margin-left: 0px;
+  margin-right: 0px;
+ 
 }
