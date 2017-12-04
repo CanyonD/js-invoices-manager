@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DropDownMenuProducts from "./DropDownMenuProducts";
-// import { browserHistory } from 'react-router';
+import axios from "axios";
 
 const removeButtonStyle = {
   margin: "0"
@@ -20,7 +20,26 @@ class TableItemsInvoice extends Component {
     console.log("componentWillMount", this);
   }
   componentDidMount() {
+    axios.get("http://localhost:8800/api/invoices/" + 4 + '/items/').then(results => {
+        let res = results.data;
+        results.data.map((x, y) => {
+            if (x.product_id !== 0) {
+              axios
+                .get("http://localhost:8800/api/products/" + x.product_id)
+                .then(results => {
+                  if (results.data === null) res[y].items = [];
+                  else {res[y].price = results.data.price;res[y].product_id = results.data.id;}
+                  // TODO Need to optimizing this state
+                  this.setState({
+                    items: res
+                  });
+                });
+            }
+            return x;
+          });
+      });
     console.log("componentDidMount", this);
+    
   }
   queryChange(evt) {
     console.log("queryChange", this, evt);
@@ -61,6 +80,7 @@ class TableItemsInvoice extends Component {
           <thead>
             <tr>
               <th>#</th>
+              <th style={{ width: "70px" }} className="text-center">Product id</th>
               <th>Product Name</th>
               <th className="text-center">Price</th>
               <th className="text-center">Quantity</th>
@@ -82,8 +102,9 @@ class TableItemsInvoice extends Component {
             {this.state.items.map((y, k) => (
               <tr key={k}>
                 <td>{y.id}</td>
+                <td className="text-center">{y.product_id}</td>
                 <td>
-                  <DropDownMenuProducts />
+                  <DropDownMenuProducts value={y.product_id}/>
                 </td>
                 <td className="text-center">{y.price}</td>
                 <td className="text-center">
