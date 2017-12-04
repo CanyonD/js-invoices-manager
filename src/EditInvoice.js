@@ -4,13 +4,11 @@ import IconButton from "material-ui/IconButton";
 import BackIcon from "material-ui/svg-icons/navigation/arrow-back";
 import TableItemsInvoice from "./TableItemsInvoice";
 
-class NewInvoice extends Component {
+class EditInvoice extends Component {
   constructor(props) {
     super(props);
     this.state = this.props.state;
-    // this.props = this.props.props;
     this.render = this.render.bind(this);
-    // this.componentDidMount = this.componentDidMount.bind(this);
     console.log("constructor", this);
   }
 
@@ -30,7 +28,7 @@ class NewInvoice extends Component {
               >
                 <BackIcon />
               </IconButton>
-              <div className={"col-md-2 control-label"}>New Invoice</div>
+              <div className={"col-md-2 control-label"}>Edit Invoice</div>
             </legend>
             <div className="form-group">
               <label className="control-label col-sm-2">Customer</label>
@@ -67,4 +65,4 @@ class NewInvoice extends Component {
   }
 }
 
-export default NewInvoice;
+export default EditInvoice;

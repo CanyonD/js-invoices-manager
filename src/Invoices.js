@@ -34,11 +34,13 @@ class Invoices extends Component {
   }
 
   handleRemove(params) {
-    axios.delete("http://localhost:8800/api/invoices/" + params.id).then(results => {
-      let res = results.data;
-      this.componentDidMount();
-    });
-
+    axios
+      .delete("http://localhost:8800/api/invoices/" + params.id)
+      .then(results => {
+        let res = results.data;
+        console.log(res);
+        this.componentDidMount();
+      });
   }
   componentDidMount() {
     axios.get("http://localhost:8800/api/invoices").then(results => {
@@ -56,6 +58,7 @@ class Invoices extends Component {
               });
             });
         }
+        return x;
       });
     });
     console.log("componentDidMount", this);
@@ -72,6 +75,7 @@ class Invoices extends Component {
       })
       .then(results => {
         let res = results.data;
+        console.log(res);
         this.props.history.push("/invoice/" + res.id);
       });
   }

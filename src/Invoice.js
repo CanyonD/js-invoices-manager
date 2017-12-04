@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import NewInvoice from "./NewInvoice";
+import EditInvoice from "./EditInvoice";
 
 class Invoice extends Component {
   constructor(props) {
@@ -9,15 +9,7 @@ class Invoice extends Component {
       invoice: [],
       discount: 0,
       total: 0,
-      items: [
-        // {
-        //   id: 1,
-        //   product_id: 1,
-        //   product_name: "Bomba",
-        //   price: 5,
-        //   quantity: 2
-        // }
-      ],
+      items: [],
       products: []
     };
     this.render = this.render.bind(this);
@@ -50,13 +42,11 @@ class Invoice extends Component {
   }
 
   componentDidMount() {
-    if (this.id !== 0) {
-      axios.get("http://localhost:8800/api/invoice/0").then(results => {
-        this.setState({
-          invoice: results.data
-        });
+    axios.get("http://localhost:8800/api/invoice/0").then(results => {
+      this.setState({
+        invoice: results.data
       });
-    }
+    });
     axios.get("http://localhost:8800/api/products").then(results => {
       this.setState({
         products: results.data
@@ -69,7 +59,7 @@ class Invoice extends Component {
     console.log("render", this);
     return (
       <div>
-        <NewInvoice
+        <EditInvoice
           {...this.props}
           state={this.state}
           handleChangeDiscount={this.handleChangeDiscount}
