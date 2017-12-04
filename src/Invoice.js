@@ -33,6 +33,7 @@ class Invoice extends Component {
         ? parseInt(this.props.match.params.id, 10)
         : 0;
     console.log("constructor", this);
+    console.log("props", this.props);
   }
 
   handleChangeDiscount(event) {
@@ -61,24 +62,19 @@ class Invoice extends Component {
         products: results.data
       });
     });
+    console.log("componentDidMount", this);
   }
 
   render() {
-    console.log('render', this)
+    console.log("render", this);
     return (
       <div>
-        {this.id === 0
-          ? <NewInvoice
-              props={this.props}
-              state={this.state}
-              handleChangeDiscount={this.handleChangeDiscount}
-              handleRemoveClick={this.handleRemoveClick}
-            />
-          : <h2>
-              <div>
-                Edit Invoice#{this.id}
-              </div>
-            </h2>}
+        <NewInvoice
+          {...this.props}
+          state={this.state}
+          handleChangeDiscount={this.handleChangeDiscount}
+          handleRemoveClick={this.handleRemoveClick}
+        />
       </div>
     );
   }

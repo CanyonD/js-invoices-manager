@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import DropDownMenuProducts from "./DropDownMenuProducts";
+// import { browserHistory } from 'react-router';
+
 const removeButtonStyle = {
   margin: "0"
 };
@@ -26,20 +28,20 @@ class TableItemsInvoice extends Component {
 
   addItem() {
     console.log("addItem", this);
-    this.setState({
-      items: [
-        {
-          id: 1,
-          product_id: 1,
-          product_name: "Bomba",
-          price: 0,
-          quantity: 1
-        }
-      ]
-    });
+    // this.setState({
+    //   items: [
+    //     {
+    //       id: 1,
+    //       product_id: 1,
+    //       product_name: "Bomba",
+    //       price: 0,
+    //       quantity: 1
+    //     }
+    //   ]
+    // });
   }
 
-  handleChangeQuantity(event, item, row) {
+  handleChangeQuantity(event, row) {
     let value =
       event.target.value !== "" && !isNaN(parseInt(event.target.value, 10))
         ? parseInt(event.target.value, 10)
@@ -77,36 +79,32 @@ class TableItemsInvoice extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.items.map((y, k) =>
+            {this.state.items.map((y, k) => (
               <tr key={k}>
-                <td>
-                  {y.id}
-                </td>
+                <td>{y.id}</td>
                 <td>
                   <DropDownMenuProducts />
                 </td>
-                <td className="text-center">
-                  {y.price}
-                </td>
+                <td className="text-center">{y.price}</td>
                 <td className="text-center">
                   <input
                     type="text"
                     className={"form-control input-sm"}
                     value={y.quantity}
-                    onChange={event => this.handleChangeQuantity(event, y, k)}
+                    onChange={event => this.handleChangeQuantity(event, k)}
                   />
                 </td>
                 <th>
                   <button
                     className="btn btn-danger"
                     style={removeButtonStyle}
-                    onClick={this.props.props.handleRemoveClick}
+                    onClick={this.props.handleRemoveClick}
                   >
                     Remove
                   </button>
                 </th>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>

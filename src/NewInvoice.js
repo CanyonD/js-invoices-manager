@@ -6,7 +6,6 @@ import TableItemsInvoice from "./TableItemsInvoice";
 
 class NewInvoice extends Component {
   constructor(props) {
-    console.log("super constructor", props);
     super(props);
     this.state = this.props.state;
     // this.props = this.props.props;
@@ -26,7 +25,7 @@ class NewInvoice extends Component {
                 className={"col-md-4 control-label "}
                 tooltip="Back to list"
                 onClick={() => {
-                  this.props.props.history.push("/invoices");
+                  this.props.history.push("/invoices");
                 }}
               >
                 <BackIcon />
@@ -58,7 +57,7 @@ class NewInvoice extends Component {
             </div>
           </fieldset>
           <TableItemsInvoice
-            props={this.props.props}
+            {...this.props}
             state={this.state}
             handleRemoveClick={this.handleRemoveClick}
           />

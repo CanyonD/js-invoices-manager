@@ -21,6 +21,7 @@ class Customers extends Component {
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleEdit = this.handleRemove.bind(this);
+    console.log("constructor", this);
   }
 
   handleEdit(params) {
@@ -36,10 +37,11 @@ class Customers extends Component {
         customers: results.data
       });
     });
+    console.log("componentDidMount", this);
   }
 
   render() {
-    // console.log(this.state.customers);
+    console.log("render", this);
     return (
       <div>
         <h2>Customers</h2>

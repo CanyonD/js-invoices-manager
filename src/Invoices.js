@@ -24,35 +24,56 @@ class Invoices extends Component {
     };
     this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.handleAddInvoice = this.handleAddInvoice.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleEdit = this.handleRemove.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+    console.log("constructor", this);
   }
   handleEdit(params) {
-    console.log("handleEdit", params);
-    console.log("this", this);
-    console.log(arguments);
+    this.props.history.push("/invoice/" + params.id);
   }
 
   handleRemove(params) {
-    console.log("handleRemove", params);
-    console.log("this", this);
-    console.log(arguments);
+    axios.delete("http://localhost:8800/api/invoices/" + params.id).then(results => {
+      let res = results.data;
+      this.componentDidMount();
+    });
+
   }
   componentDidMount() {
     axios.get("http://localhost:8800/api/invoices").then(results => {
       let res = results.data;
       results.data.map((x, y) => {
-        axios
-          .get("http://localhost:8800/api/customers/" + x.customer_id)
-          .then(results => {
-            res[y].customer = results.data.name;
-            // TODO Need to optimizing this state
-            this.setState({
-              invoices: res
+        if (x.customer_id !== 0) {
+          axios
+            .get("http://localhost:8800/api/customers/" + x.customer_id)
+            .then(results => {
+              if (results.data === null) res[y].customer = "";
+              else res[y].customer = results.data.name;
+              // TODO Need to optimizing this state
+              this.setState({
+                invoices: res
+              });
             });
-          });
+        }
       });
     });
+    console.log("componentDidMount", this);
+  }
+
+  handleAddInvoice(params) {
+    axios
+      .post("http://localhost:8800/api/invoices/", {
+        body: {
+          customer_id: 0,
+          total: 0,
+          discount: 0
+        }
+      })
+      .then(results => {
+        let res = results.data;
+        this.props.history.push("/invoice/" + res.id);
+      });
   }
 
   render() {
@@ -62,20 +83,21 @@ class Invoices extends Component {
         <button
           className="btn btn-success"
           style={removeButtonStyle}
-          onClick={() => {
-            this.props.history.push("/invoice/0");
-          }}
+          onClick={this.handleAddInvoice}
         >
           Add new invoice
         </button>
-        {this.state.invoices.length === 0
-          ? <Invoice />
-          : <Grid
-              header={model}
-              data={this.state.invoices}
-              handleEdit={this.handleEdit}
-              handleRemove={this.handleRemove}
-            />}
+        {this.state.invoices.length === 0 ? (
+          <Invoice {...this.props} />
+        ) : (
+          <Grid
+            {...this.props}
+            header={model}
+            data={this.state.invoices}
+            handleEdit={this.handleEdit}
+            handleRemove={this.handleRemove}
+          />
+        )}
       </div>
     );
   }
