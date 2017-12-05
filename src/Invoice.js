@@ -6,14 +6,24 @@ class Invoice extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      invoice: [],
+      invoice: {
+        discount: 0,
+        total: 0,
+        items: []
+      },
       discount: 0,
       total: 0,
-      items: [],
       products: []
     };
+
+    axios.get("http://localhost:8800/api/products").then(results => {
+      this.setState({
+        products: results.data
+      });
+    });
+
+    this.componentWillMount = this.componentWillMount.bind(this);
     this.render = this.render.bind(this);
-    this.componentDidMount = this.componentDidMount.bind(this);
     this.handleChangeDiscount = this.handleChangeDiscount.bind(this);
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
 
@@ -25,7 +35,7 @@ class Invoice extends Component {
         ? parseInt(this.props.match.params.id, 10)
         : 0;
     console.log("constructor", this);
-    console.log("props", this.props);
+    console.log("state", this.state);
   }
 
   handleChangeDiscount(event) {
@@ -41,18 +51,17 @@ class Invoice extends Component {
     console.log(event);
   }
 
-  componentDidMount() {
-    axios.get("http://localhost:8800/api/invoice/0").then(results => {
-      this.setState({
-        invoice: results.data
-      });
-    });
-    axios.get("http://localhost:8800/api/products").then(results => {
-      this.setState({
-        products: results.data
-      });
-    });
-    console.log("componentDidMount", this);
+  componentWillMount() {
+    if (this.id !== 0) {
+      axios
+        .get("http://localhost:8800/api/invoices/" + this.id)
+        .then(results => {
+          this.setState({
+            invoice: results.data
+          });
+        });
+    }
+    console.log("componentWillMount", this);
   }
 
   render() {
@@ -61,7 +70,8 @@ class Invoice extends Component {
       <div>
         <EditInvoice
           {...this.props}
-          state={this.state}
+          state = {this.state}
+          products = {this.state.products}
           handleChangeDiscount={this.handleChangeDiscount}
           handleRemoveClick={this.handleRemoveClick}
         />

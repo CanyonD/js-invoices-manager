@@ -11,35 +11,39 @@ class TableItemsInvoice extends Component {
     super(props);
     this.state = this.props.state;
     this.addItem = this.addItem.bind(this);
+    this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleChangeQuantity = this.handleChangeQuantity.bind(this);
     console.log("constructor", this);
   }
 
-  componentWillMount() {
-    console.log("componentWillMount", this);
-  }
   componentDidMount() {
-    axios.get("http://localhost:8800/api/invoices/" + 4 + '/items/').then(results => {
+    axios
+      .get("http://localhost:8800/api/invoices/" + 14 + "/items/")
+      .then(results => {
         let res = results.data;
         results.data.map((x, y) => {
-            if (x.product_id !== 0) {
-              axios
-                .get("http://localhost:8800/api/products/" + x.product_id)
-                .then(results => {
-                  if (results.data === null) res[y].items = [];
-                  else {res[y].price = results.data.price;res[y].product_id = results.data.id;}
-                  // TODO Need to optimizing this state
-                  this.setState({
+          if (x.product_id !== 0) {
+            axios
+              .get("http://localhost:8800/api/products/" + x.product_id)
+              .then(results => {
+                if (results.data === null) res[y].items = [];
+                else {
+                  res[y].price = results.data.price;
+                  res[y].product_id = results.data.id;
+                }
+                // TODO Need to optimizing this state
+                this.setState({
+                  invoice: {
                     items: res
-                  });
+                  }
                 });
-            }
-            return x;
-          });
+              });
+          }
+          return x;
+        });
       });
     console.log("componentDidMount", this);
-    
   }
   queryChange(evt) {
     console.log("queryChange", this, evt);
@@ -65,7 +69,7 @@ class TableItemsInvoice extends Component {
       event.target.value !== "" && !isNaN(parseInt(event.target.value, 10))
         ? parseInt(event.target.value, 10)
         : 0;
-    const items = this.state.items;
+    const items = this.state.invoice.items;
     items[row].quantity = value;
     this.setState({
       items: items
@@ -80,7 +84,9 @@ class TableItemsInvoice extends Component {
           <thead>
             <tr>
               <th>#</th>
-              <th style={{ width: "70px" }} className="text-center">Product id</th>
+              <th style={{ width: "70px" }} className="text-center">
+                Product id
+              </th>
               <th>Product Name</th>
               <th className="text-center">Price</th>
               <th className="text-center">Quantity</th>
@@ -99,12 +105,16 @@ class TableItemsInvoice extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.items.map((y, k) => (
+            {this.state.invoice.items.map((y, k) => (
               <tr key={k}>
                 <td>{y.id}</td>
                 <td className="text-center">{y.product_id}</td>
                 <td>
-                  <DropDownMenuProducts value={y.product_id}/>
+                  <DropDownMenuProducts
+                    {...this.props}
+                    state={this.state}
+                    value={y.product_id}
+                  />
                 </td>
                 <td className="text-center">{y.price}</td>
                 <td className="text-center">

@@ -20,7 +20,13 @@ class Invoices extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      invoices: []
+      invoices: [
+        {
+          discount: 0,
+          total: 0,
+          items: []
+        }
+      ]
     };
     this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -46,18 +52,23 @@ class Invoices extends Component {
     axios.get("http://localhost:8800/api/invoices").then(results => {
       let res = results.data;
       results.data.map((x, y) => {
-        if (x.customer_id !== 0) {
-          axios
-            .get("http://localhost:8800/api/customers/" + x.customer_id)
-            .then(results => {
-              if (results.data === null) res[y].customer = "";
-              else res[y].customer = results.data.name;
-              // TODO Need to optimizing this state
-              this.setState({
-                invoices: res
+          if (x.customer_id !== 0 && x.customer_id !== null) {
+            axios
+              .get("http://localhost:8800/api/customers/" + x.customer_id)
+              .then(results => {
+                if (results.data === null) res[y].customer = "";
+                else res[y].customer = results.data.name;
+                // TODO Need to optimizing this state
+                this.setState({
+                  invoices: res
+                });
               });
+          } else {
+            res[y].customer = "";
+            this.setState({
+              invoices: res
             });
-        }
+          }
         return x;
       });
     });

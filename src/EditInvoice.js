@@ -7,9 +7,12 @@ import TableItemsInvoice from "./TableItemsInvoice";
 class EditInvoice extends Component {
   constructor(props) {
     super(props);
-    this.state = this.props.state;
+    this.componentWillMount = this.componentWillMount.bind(this);
     this.render = this.render.bind(this);
     console.log("constructor", this);
+  }
+  componentWillMount() {
+    console.log('componentWillMount', this);
   }
 
   render() {
@@ -39,7 +42,7 @@ class EditInvoice extends Component {
                   type="text"
                   placeholder=""
                   className={"form-control input-md"}
-                  value={this.props.state.discount}
+                  value={this.props.state.invoice.discount}
                   onChange={this.props.handleChangeDiscount}
                 />
               </div>
@@ -49,7 +52,7 @@ class EditInvoice extends Component {
                   type="text"
                   readOnly="readonly"
                   className="form-control"
-                  value={this.props.state.total}
+                  value={this.props.state.invoice.total}
                 />
               </div>
             </div>

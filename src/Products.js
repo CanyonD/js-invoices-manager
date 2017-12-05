@@ -14,12 +14,13 @@ class Products extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      products: []
+      products_list: []
     };
     this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleEdit = this.handleRemove.bind(this);
+    console.log('constructor',this);
   }
 
   handleEdit(params) {
@@ -40,9 +41,10 @@ class Products extends Component {
   componentDidMount() {
     axios.get("http://localhost:8800/api/products").then(results => {
       this.setState({
-        products: results.data
+        products_list: results.data
       });
     });
+    console.log('componentDidMount',this);
   }
 
   render() {
@@ -52,7 +54,7 @@ class Products extends Component {
         <h2>Products</h2>
         <Grid
           header={model}
-          data={this.state.products}
+          data={this.state.products_list}
           handleEdit={this.handleEdit}
           handleRemove={this.handleRemove}
         />
