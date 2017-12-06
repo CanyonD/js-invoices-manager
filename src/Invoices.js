@@ -28,6 +28,13 @@ class Invoices extends Component {
         }
       ]
     };
+
+    axios.get("http://localhost:8800/api/customers").then(results => {
+      this.setState({
+        customers: results.data
+      });
+    });
+
     this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleAddInvoice = this.handleAddInvoice.bind(this);
@@ -53,16 +60,12 @@ class Invoices extends Component {
       let res = results.data;
       results.data.map((x, y) => {
         if (x.customer_id !== 0 && x.customer_id !== null) {
-          axios
-            .get("http://localhost:8800/api/customers/" + x.customer_id)
-            .then(results => {
-              if (results.data === null) res[y].customer = "";
-              else res[y].customer = results.data.name;
-              // TODO Need to optimizing this state
-              this.setState({
-                invoices: res
-              });
-            });
+          res[y].customer = this.state.customers.find(
+            p => p.id === x.customer_id
+          ).name;
+          this.setState({
+            invoices: res
+          });
         } else {
           res[y].customer = "";
           this.setState({
@@ -100,17 +103,15 @@ class Invoices extends Component {
         >
           Add new invoice
         </button>
-        {this.state.invoices.length === 0 ? (
-          <Invoice {...this.props} />
-        ) : (
-          <Grid
-            {...this.props}
-            header={model}
-            data={this.state.invoices}
-            handleEdit={this.handleEdit}
-            handleRemove={this.handleRemove}
-          />
-        )}
+        {this.state.invoices.length === 0
+          ? <Invoice {...this.props} />
+          : <Grid
+              {...this.props}
+              header={model}
+              data={this.state.invoices}
+              handleEdit={this.handleEdit}
+              handleRemove={this.handleRemove}
+            />}
       </div>
     );
   }
