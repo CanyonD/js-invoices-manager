@@ -33,7 +33,7 @@ class Invoices extends Component {
     this.handleAddInvoice = this.handleAddInvoice.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
-    console.log("constructor", this);
+    // console.log("constructor", this);
   }
   handleEdit(params) {
     this.props.history.push("/invoice/" + params.id);
@@ -43,8 +43,8 @@ class Invoices extends Component {
     axios
       .delete("http://localhost:8800/api/invoices/" + params.id)
       .then(results => {
-        let res = results.data;
-        console.log(res);
+        // let res = results.data;
+        // console.log(res);
         this.componentDidMount();
       });
   }
@@ -52,47 +52,45 @@ class Invoices extends Component {
     axios.get("http://localhost:8800/api/invoices").then(results => {
       let res = results.data;
       results.data.map((x, y) => {
-          if (x.customer_id !== 0 && x.customer_id !== null) {
-            axios
-              .get("http://localhost:8800/api/customers/" + x.customer_id)
-              .then(results => {
-                if (results.data === null) res[y].customer = "";
-                else res[y].customer = results.data.name;
-                // TODO Need to optimizing this state
-                this.setState({
-                  invoices: res
-                });
+        if (x.customer_id !== 0 && x.customer_id !== null) {
+          axios
+            .get("http://localhost:8800/api/customers/" + x.customer_id)
+            .then(results => {
+              if (results.data === null) res[y].customer = "";
+              else res[y].customer = results.data.name;
+              // TODO Need to optimizing this state
+              this.setState({
+                invoices: res
               });
-          } else {
-            res[y].customer = "";
-            this.setState({
-              invoices: res
             });
-          }
+        } else {
+          res[y].customer = "";
+          this.setState({
+            invoices: res
+          });
+        }
         return x;
       });
     });
-    console.log("componentDidMount", this);
+    // console.log("componentDidMount", this);
   }
 
   handleAddInvoice(params) {
     axios
       .post("http://localhost:8800/api/invoices/", {
-        body: {
-          customer_id: 0,
-          total: 0,
-          discount: 0
-        }
+        customer_id: 0,
+        total: 0,
+        discount: 0
       })
       .then(results => {
         let res = results.data;
-        console.log(res);
+        // console.log(res);
         this.props.history.push("/invoice/" + res.id);
       });
   }
 
   render() {
-    console.log("render", this);
+    // console.log("render", this);
     return (
       <div>
         <button

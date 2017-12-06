@@ -43,10 +43,10 @@ class Grid extends Component {
   constructor(props) {
     super(props);
     this.render = this.render.bind(this);
-    console.log("constructor", this);
+    // console.log("constructor", this);
   }
   render() {
-    console.log("render", this);
+    // console.log("render", this);
     return (
       <Table fixedHeader={true} selectable={true}>
         >
