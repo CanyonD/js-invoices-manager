@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import DropDownMenuCustomers from "./DropDownMenuCustomers";
 import IconButton from "material-ui/IconButton";
 import BackIcon from "material-ui/svg-icons/navigation/arrow-back";
 
@@ -27,6 +26,12 @@ class Invoice extends Component {
       });
     });
 
+    axios.get("http://localhost:8800/api/customers").then(results => {
+      this.setState({
+        customers: results.data
+      });
+    });
+
     this.componentWillMount = this.componentWillMount.bind(this);
     this.render = this.render.bind(this);
     this.handleChangeDiscount = this.handleChangeDiscount.bind(this);
@@ -34,6 +39,7 @@ class Invoice extends Component {
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleChangeProduct = this.handleChangeProduct.bind(this);
+    this.handleChangeCustomer = this.handleChangeCustomer.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
 
     this.id =
@@ -73,7 +79,7 @@ class Invoice extends Component {
               invoice: Object.assign(this.state.invoice, { items: res })
             });
           }
-          this.calculateTotal();
+          // this.calculateTotal();
           return x;
         });
       });
@@ -93,7 +99,7 @@ class Invoice extends Component {
       .then(results => {
         let res = results.data;
         console.log(res);
-        this.calculateTotal();
+        // this.calculateTotal();
         this.componentWillMount();
       });
   }
@@ -131,24 +137,40 @@ class Invoice extends Component {
     // this.setState({ value: value });
   }
 
-  calculateTotal () {
-    let total = 0;
-    this.state.invoice.items.map((x, y) => (
-      total +=  x.price*x.quantity
-    ))
-
-    console.log(total)
+  handleChangeCustomer(event) {
+    // console.log("event: ", event.target.attributes.item_id.value);
+    // console.log("id product: ", event.target.value);
     axios
-    .put("http://localhost:8800/api/invoices/" + this.id, {
-      total: total
-    })
-    .then(results => {
-      let res = results.data;
-      console.log(res);
-      // this.componentDidMount();
-      this.componentWillMount();
-    });
+      .put(
+        "http://localhost:8800/api/invoices/" +
+          this.id ,
+        {
+          customer_id: event.target.value
+        }
+      )
+      .then(results => {
+        let res = results.data;
+        console.log(res);
+        this.componentDidMount();
+      });
+    // this.setState({ value: value });
+  }
 
+  calculateTotal() {
+    let total = 0;
+    this.state.invoice.items.map((x, y) => (total += x.price * x.quantity));
+
+    console.log(total);
+    axios
+      .put("http://localhost:8800/api/invoices/" + this.id, {
+        total: total
+      })
+      .then(results => {
+        let res = results.data;
+        console.log(res);
+        // this.componentDidMount();
+        this.componentWillMount();
+      });
   }
 
   handleAddClick() {
@@ -228,7 +250,25 @@ class Invoice extends Component {
               </legend>
               <div className="form-group">
                 <label className="control-label col-sm-2">Customer</label>
-                <DropDownMenuCustomers />
+
+                <div className="col-md-3">
+        <select
+          className="form-control"
+          id="sel1"
+          value={this.state.invoice.customer_id}
+          onChange={this.handleChangeCustomer}
+        >
+          <option key={`ddm-i-${0}`} value={0}>
+            Please select customer
+          </option>
+          {this.state.customers.map((x, y) =>
+            <option key={`ddm-i-${x.id}`} value={x.id}>
+              {x.name}
+            </option>
+          )}
+        </select>
+      </div>
+
                 <label className="control-label col-sm-1">Discount</label>
                 <div className="col-md-1">
                   <input
@@ -278,10 +318,14 @@ class Invoice extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.invoice.items.map((y, k) => (
+                  {this.state.invoice.items.map((y, k) =>
                     <tr key={k}>
-                      <td>{y.id}</td>
-                      <td className="text-center">{y.product_id}</td>
+                      <td>
+                        {y.id}
+                      </td>
+                      <td className="text-center">
+                        {y.product_id}
+                      </td>
                       <td>
                         <select
                           className="form-control"
@@ -290,14 +334,19 @@ class Invoice extends Component {
                           value={y.product_id}
                           onChange={this.handleChangeProduct}
                         >
-                          {this.state.products.map((x, y) => (
+                          <option key={`ddm-i-${0}`} value={0}>
+                            Please select product
+                          </option>
+                          {this.state.products.map((x, y) =>
                             <option key={`ddm-i-${y}`} value={y}>
-                              {y === 0 ? "Please select product" : x.name}
+                              {x.name}
                             </option>
-                          ))}
+                          )}
                         </select>
                       </td>
-                      <td className="text-center">{y.price}</td>
+                      <td className="text-center">
+                        {y.price}
+                      </td>
                       <td className="text-center">
                         <input
                           type="text"
@@ -305,8 +354,7 @@ class Invoice extends Component {
                           value={y.quantity}
                           item_id={y.id}
                           onChange={event =>
-                            this.handleChangeQuantity(event, k)
-                          }
+                            this.handleChangeQuantity(event, k)}
                         />
                       </td>
                       <th>
@@ -319,7 +367,7 @@ class Invoice extends Component {
                         </button>
                       </th>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
