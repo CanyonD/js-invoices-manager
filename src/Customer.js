@@ -3,20 +3,22 @@ import axios from "axios";
 import IconButton from "material-ui/IconButton";
 import BackIcon from "material-ui/svg-icons/navigation/arrow-back";
 
-class Product extends Component {
+class Customer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product: {
-        name: 0,
-        price: 0
+      customer: {
+        name: '',
+        address: '',
+        phone: ''
       }
     };
     // this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleChangeName = this.handleChangeName.bind(this);
-    this.handleChangePrice = this.handleChangePrice.bind(this);
-
+    this.handleChangeAddress = this.handleChangeAddress.bind(this);
+    this.handleChangePhone = this.handleChangePhone.bind(this);
+    
     this.id =
       this.props !== undefined &&
       this.props.match !== undefined &&
@@ -28,22 +30,28 @@ class Product extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:8800/api/products/" + this.props.match.params.id)
+      .get("http://localhost:8800/api/customers/" + this.props.match.params.id)
       .then(results => {
         this.setState({
-          product: results.data
+          customer: results.data
         });
       });
   }
 
-  handleChangePrice(event) {
-    let value =
-      event.target.value !== "" && !isNaN(parseInt(event.target.value, 10))
-        ? parseInt(event.target.value, 10)
-        : 0;
+  handleChangeAddress(event) {
     axios
-      .put("http://localhost:8800/api/products/" + this.id, {
-        price: value
+      .put("http://localhost:8800/api/customers/" + this.id, {
+        address: event.target.value
+      })
+      .then(results => {
+        this.componentDidMount();
+      });
+  }
+
+  handleChangePhone(event) {
+    axios
+      .put("http://localhost:8800/api/customers/" + this.id, {
+        phone: event.target.value
       })
       .then(results => {
         this.componentDidMount();
@@ -52,7 +60,7 @@ class Product extends Component {
 
   handleChangeName(event) {
     axios
-      .put("http://localhost:8800/api/products/" + this.id, {
+      .put("http://localhost:8800/api/customers/" + this.id, {
         name: event.target.value
       })
       .then(results => {
@@ -70,7 +78,7 @@ class Product extends Component {
                 className={"col-md-4 control-label "}
                 tooltip="Back to list"
                 onClick={() => {
-                  this.props.history.push("/products");
+                  this.props.history.push("/customers");
                 }}
               >
                 <BackIcon />
@@ -82,25 +90,37 @@ class Product extends Component {
             <form className="form-horizontal">
               <div className="form-group">
                 <label className="control-label col-sm-1">Name</label>
-                <div className="col-md-2">
+                <div className="col-md-5">
                   <input
                     type="text"
                     placeholder=""
                     className={"form-control input-md input-name"}
-                    value={this.state.product.name}
+                    value={this.state.customer.name}
                     onChange={this.handleChangeName}
                   />
                 </div>
               </div>
               <div className="form-group">
-                <label className="control-label col-sm-1">Price</label>
-                <div className="col-md-2">
+                <label className="control-label col-sm-1">Address</label>
+                <div className="col-md-5">
                   <input
                     type="text"
                     placeholder=""
                     className={"form-control input-md input-price"}
-                    value={this.state.product.price}
-                    onChange={this.handleChangePrice}
+                    value={this.state.customer.address}
+                    onChange={this.handleChangeAddress}
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="control-label col-sm-1">Phone</label>
+                <div className="col-md-5">
+                  <input
+                    type="text"
+                    placeholder=""
+                    className={"form-control input-md input-price"}
+                    value={this.state.customer.phone}
+                    onChange={this.handleChangePhone}
                   />
                 </div>
               </div>
@@ -112,4 +132,4 @@ class Product extends Component {
   }
 }
 
-export default Product;
+export default Customer;

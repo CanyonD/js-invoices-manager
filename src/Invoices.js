@@ -3,7 +3,7 @@ import axios from "axios";
 import Grid from "./Grid";
 import Invoice from "./Invoice";
 
-const removeButtonStyle = {
+const customButtonStyle = {
   margin: "0"
 };
 
@@ -98,7 +98,7 @@ class Invoices extends Component {
       <div>
         <button
           className="btn btn-success"
-          style={removeButtonStyle}
+          style={customButtonStyle}
           onClick={this.handleAddInvoice}
         >
           Add new invoice

@@ -2,11 +2,15 @@ import React, { Component } from "react";
 import axios from "axios";
 import Grid from "./Grid";
 
+const customButtonStyle = {
+  margin: "0"
+};
+
 let model = [
   { name: "ID", prop: "id" },
   { name: "Name", prop: "name" },
-  { name: "Phone", prop: "phone" },
   { name: "Address", prop: "address" },
+  { name: "Phone", prop: "phone" },
   { name: "Added", prop: "createdAt" },
   { name: "Updated", prop: "updatedAt" }
 ];
@@ -19,16 +23,34 @@ class Customers extends Component {
     };
     this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleEdit = this.handleRemove.bind(this);
-    console.log("constructor", this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   handleEdit(params) {
-    console.log("handleEdit: ", params);
+    window.location.href = "/customer/" + params.id;
   }
+
   handleRemove(params) {
-    console.log("handleRemove: ", params);
+    axios
+      .delete("http://localhost:8800/api/customers/" + params.id)
+      .then(results => {
+        this.componentDidMount();
+      });
+  }
+
+  handleAdd(params) {
+    axios
+      .post("http://localhost:8800/api/customers/", {
+        name: "",
+        address: '',
+        phone: ""
+      })
+      .then(results => {
+        let res = results.data;
+        this.props.history.push("/customer/" + res.id);
+      });
   }
 
   componentDidMount() {
@@ -37,14 +59,27 @@ class Customers extends Component {
         customers: results.data
       });
     });
-    console.log("componentDidMount", this);
   }
 
   render() {
-    console.log("render", this);
     return (
-      <div>
-        <h2>Customers</h2>
+      <div className="form-horizontal">
+        <div className="form-group">
+          <div className="row">
+            <div className="col-md-5">
+              <h2>List of customers</h2>
+            </div>
+            <div className="col-md-4">
+              <button
+                className="btn btn-success"
+                style={customButtonStyle}
+                onClick={this.handleAdd}
+              >
+                Add new customer
+              </button>
+            </div>
+          </div>
+        </div>
         <Grid
           header={model}
           data={this.state.customers}

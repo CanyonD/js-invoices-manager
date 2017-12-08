@@ -9,6 +9,7 @@ import getMuiTheme from "material-ui/styles/getMuiTheme";
 import Products from "./Products";
 import Product from "./Product";
 import Customers from "./Customers";
+import Customer from "./Customer";
 import Invoices from "./Invoices";
 import Invoice from "./Invoice";
 import NotFound from "./NotFound";
@@ -55,6 +56,7 @@ class App extends Component {
             <Route exact path="/products" component={Products} />
             <Route exact path="/product/:id" component={Product} />
             <Route exact path="/customers" component={Customers} />
+            <Route exact path="/customer/:id" component={Customer} />
             <Route exact path="/invoices" component={Invoices} />
             <Route exact path="/invoice/:id" component={Invoice} />
             <Route path="*" component={NotFound} status={404} />

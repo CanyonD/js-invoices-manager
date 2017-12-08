@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import axios from "axios";
 import Grid from "./Grid";
 
+const customButtonStyle = {
+  margin: "0"
+};
+
 let model = [
   { name: "ID", prop: "id" },
   { name: "Name", prop: "name" },
@@ -18,24 +22,33 @@ class Products extends Component {
     };
     this.render = this.render.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleEdit = this.handleRemove.bind(this);
-    console.log('constructor',this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   handleEdit(params) {
-    console.log("handleEdit: ", params);
-    console.log("this: ", this);
-    console.log(arguments);
-    // this.props.history.push("/product/1");
+    window.location.href = "/product/" + params.id;
+  }
 
-    window.location.href = "/product/1";
+  handleAdd(params) {
+    axios
+      .post("http://localhost:8800/api/products/", {
+        name: "",
+        price: 0
+      })
+      .then(results => {
+        let res = results.data;
+        this.props.history.push("/product/" + res.id);
+      });
   }
 
   handleRemove(params) {
-    console.log("handleRemove: ", params);
-    console.log("this: ", this);
-    console.log(arguments);
+    axios
+      .delete("http://localhost:8800/api/products/" + params.id)
+      .then(results => {
+        this.componentDidMount();
+      });
   }
 
   componentDidMount() {
@@ -44,14 +57,27 @@ class Products extends Component {
         products_list: results.data
       });
     });
-    console.log('componentDidMount',this);
   }
 
   render() {
-    console.log(this);
     return (
-      <div>
-        <h2>Products</h2>
+      <div className="form-horizontal">
+        <div className="form-group">
+          <div className="row">
+            <div className="col-md-5">
+              <h2>List of products</h2>
+            </div>
+            <div className="col-md-4">
+              <button
+                className="btn btn-success"
+                style={customButtonStyle}
+                onClick={this.handleAdd}
+              >
+                Add new product
+              </button>
+            </div>
+          </div>
+        </div>
         <Grid
           header={model}
           data={this.state.products_list}
