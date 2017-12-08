@@ -3,8 +3,9 @@ import axios from "axios";
 import IconButton from "material-ui/IconButton";
 import BackIcon from "material-ui/svg-icons/navigation/arrow-back";
 
-const removeButtonStyle = {
-  margin: "0"
+const customButtonStyle = {
+  margin: "0",
+  width: "110px"
 };
 
 class Invoice extends Component {
@@ -120,8 +121,6 @@ class Invoice extends Component {
   }
 
   handleChangeProduct(event) {
-    // console.log("event: ", event.target.attributes.item_id.value);
-    // console.log("id product: ", event.target.value);
     axios
       .put(
         "http://localhost:8800/api/invoices/" +
@@ -134,25 +133,19 @@ class Invoice extends Component {
       )
       .then(results => {
         let res = results.data;
-        console.log(res);
         this.componentDidMount();
       });
-    // this.setState({ value: value });
   }
 
   handleChangeCustomer(event) {
-    // console.log("event: ", event.target.attributes.item_id.value);
-    // console.log("id product: ", event.target.value);
     axios
       .put("http://localhost:8800/api/invoices/" + this.id, {
         customer_id: event.target.value
       })
       .then(results => {
         let res = results.data;
-        console.log(res);
-        this.componentDidMount();
+        this.componentWillMount();
       });
-    // this.setState({ value: value });
   }
 
   calculateTotal() {
@@ -304,9 +297,6 @@ class Invoice extends Component {
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th style={{ width: "70px" }} className="text-center">
-                      Product id
-                    </th>
                     <th>Product Name</th>
                     <th className="text-center">Price</th>
                     <th className="text-center">Quantity</th>
@@ -314,7 +304,7 @@ class Invoice extends Component {
                       <section>
                         <button
                           className="btn btn-success"
-                          style={removeButtonStyle}
+                          style={customButtonStyle}
                           key={"addItem"}
                           onClick={() => this.handleAddClick()}
                         >
@@ -328,7 +318,6 @@ class Invoice extends Component {
                   {this.state.invoice.items.map((y, k) => (
                     <tr key={k}>
                       <td>{y.id}</td>
-                      <td className="text-center">{y.product_id}</td>
                       <td>
                         <select
                           className="form-control"
@@ -337,7 +326,7 @@ class Invoice extends Component {
                           value={y.product_id}
                           onChange={this.handleChangeProduct}
                         >
-                          <option key={`ddm-i-${0}`} value={0}>
+                          <option key={`ddm-i-${0}`} value={null}>
                             Please select product
                           </option>
                           {this.state.products.map((x, y) => (
@@ -362,7 +351,7 @@ class Invoice extends Component {
                       <th>
                         <button
                           className="btn btn-danger"
-                          style={removeButtonStyle}
+                          style={customButtonStyle}
                           onClick={() => this.handleRemoveClick(y)}
                         >
                           Remove
