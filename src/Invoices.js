@@ -40,8 +40,8 @@ class Invoices extends Component {
     this.handleAddInvoice = this.handleAddInvoice.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
-    // console.log("constructor", this);
   }
+
   handleEdit(params) {
     this.props.history.push("/invoice/" + params.id);
   }
@@ -50,11 +50,10 @@ class Invoices extends Component {
     axios
       .delete("http://localhost:8800/api/invoices/" + params.id)
       .then(results => {
-        // let res = results.data;
-        // console.log(res);
         this.componentDidMount();
       });
   }
+
   componentDidMount() {
     axios.get("http://localhost:8800/api/invoices").then(results => {
       let res = results.data;
@@ -75,7 +74,6 @@ class Invoices extends Component {
         return x;
       });
     });
-    // console.log("componentDidMount", this);
   }
 
   handleAddInvoice(params) {
@@ -93,25 +91,35 @@ class Invoices extends Component {
   }
 
   render() {
-    // console.log("render", this);
     return (
-      <div>
-        <button
-          className="btn btn-success"
-          style={customButtonStyle}
-          onClick={this.handleAddInvoice}
-        >
-          Add new invoice
-        </button>
-        {this.state.invoices.length === 0
-          ? <Invoice {...this.props} />
-          : <Grid
-              {...this.props}
-              header={model}
-              data={this.state.invoices}
-              handleEdit={this.handleEdit}
-              handleRemove={this.handleRemove}
-            />}
+      <div className="form-horizontal">
+        <div className="form-group">
+          <div className="row">
+            <div className="col-md-5">
+              <h2>List of invoices</h2>
+            </div>
+            <div className="col-md-4">
+              <button
+                className="btn btn-success"
+                style={customButtonStyle}
+                onClick={this.handleAddInvoice}
+              >
+                Add new invoice
+              </button>
+            </div>
+          </div>
+        </div>
+        {this.state.invoices.length === 0 ? (
+          <Invoice {...this.props} />
+        ) : (
+          <Grid
+            {...this.props}
+            header={model}
+            data={this.state.invoices}
+            handleEdit={this.handleEdit}
+            handleRemove={this.handleRemove}
+          />
+        )}
       </div>
     );
   }

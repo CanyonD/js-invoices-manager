@@ -33,12 +33,12 @@ class Invoice extends Component {
       });
     });
 
-    this.componentWillMount = this.componentWillMount.bind(this);
     this.render = this.render.bind(this);
+    this.componentWillMount = this.componentWillMount.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
     this.handleChangeDiscount = this.handleChangeDiscount.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
-    this.componentDidMount = this.componentDidMount.bind(this);
     this.handleChangeProduct = this.handleChangeProduct.bind(this);
     this.handleChangeCustomer = this.handleChangeCustomer.bind(this);
     this.calculateTotal = this.calculateTotal.bind(this);
@@ -50,11 +50,9 @@ class Invoice extends Component {
       this.props.match.params.id !== undefined
         ? parseInt(this.props.match.params.id, 10)
         : 0;
-    console.log("constructor", this);
-    console.log("state", this.state);
   }
 
-  componentDidMount() {
+  componentDidMount(callback) {
     axios
       .get("http://localhost:8800/api/invoices/" + this.id + "/items/")
       .then(results => {
@@ -69,10 +67,10 @@ class Invoice extends Component {
                   res[y].price = results.data.price;
                   res[y].product_id = results.data.id;
                 }
-                // TODO Need to optimizing this state
                 this.setState({
                   invoice: Object.assign(this.state.invoice, { items: res })
                 });
+                if (callback === true) this.calculateTotal();
               });
           } else {
             res[y].price = 0;
@@ -80,30 +78,30 @@ class Invoice extends Component {
               invoice: Object.assign(this.state.invoice, { items: res })
             });
           }
-          return x;
         });
       });
-    console.log("componentDidMount", this);
   }
 
   handleChangeDiscount(event) {
     let value =
-        event.target.value !== "" && !isNaN(parseInt(event.target.value, 10))
-          ? parseInt(event.target.value, 10)
-          : 0,
-      calc_total =
-        this.state.invoice.total - this.state.invoice.total * value / 100;
+      event.target.value !== "" && !isNaN(parseInt(event.target.value, 10))
+        ? parseInt(event.target.value, 10)
+        : 0;
+    let total = 0;
+    this.state.invoice.items.map((x, y) => {
+      console.log("calculate", x.price, x.quantity);
+      if (x.price === undefined) x.price = 0;
+      total += x.price * x.quantity;
+      return x;
+    });
+    let calc_total = total - total * value / 100;
 
-    console.log();
     axios
       .put("http://localhost:8800/api/invoices/" + this.id, {
         discount: value,
         total: calc_total
       })
       .then(results => {
-        let res = results.data;
-        console.log("handleChangeDiscount result", res);
-        // this.calculateTotal();
         this.componentWillMount();
       });
   }
@@ -114,13 +112,12 @@ class Invoice extends Component {
         "http://localhost:8800/api/invoices/" + this.id + "/items/" + event.id
       )
       .then(results => {
-        let res = results.data;
-        console.log(res);
         this.componentDidMount();
       });
   }
 
-  handleChangeProduct(event) {
+  handleChangeProduct(event, row) {
+    let value = event.target.value;
     axios
       .put(
         "http://localhost:8800/api/invoices/" +
@@ -128,12 +125,12 @@ class Invoice extends Component {
           "/items/" +
           event.target.attributes.item_id.value,
         {
-          product_id: event.target.value
+          product_id: value
         }
       )
       .then(results => {
-        let res = results.data;
-        this.componentDidMount();
+        this.componentDidMount(true);
+        this.componentWillMount();
       });
   }
 
@@ -143,7 +140,6 @@ class Invoice extends Component {
         customer_id: event.target.value
       })
       .then(results => {
-        let res = results.data;
         this.componentWillMount();
       });
   }
@@ -151,27 +147,26 @@ class Invoice extends Component {
   calculateTotal() {
     let total = 0;
     this.state.invoice.items.map((x, y) => {
-      console.log(x.price, x.quantity);
+      if (x.price === undefined) x.price = 0;
       total += x.price * x.quantity;
-      console.log(total);
       return x;
     });
-
-    console.log("calculateTotal", total);
+    total = total - total * this.state.invoice.discount / 100;
     axios
       .put("http://localhost:8800/api/invoices/" + this.id, {
         total: total
       })
       .then(results => {
         let res = results.data;
-        console.log("calculateTotal result", res);
-        // this.componentDidMount();
-        // this.componentWillMount();
+        this.setState({
+          invoice: Object.assign(results.data, {
+            items: this.state.invoice.items
+          })
+        });
       });
   }
 
   handleAddClick() {
-    console.log("handleAddClick", this);
     axios
       .post(
         "http://localhost:8800/api/invoices/" +
@@ -184,8 +179,6 @@ class Invoice extends Component {
         }
       )
       .then(results => {
-        let res = results.data;
-        console.log(res);
         this.componentWillMount();
       });
   }
@@ -202,11 +195,9 @@ class Invoice extends Component {
           });
         });
     }
-    console.log("componentWillMount", this);
   }
 
   handleChangeQuantity(event, row) {
-    console.log("handleChangeQuantity", this);
     let value =
       event.target.value !== "" && !isNaN(parseInt(event.target.value, 10))
         ? parseInt(event.target.value, 10)
@@ -222,15 +213,17 @@ class Invoice extends Component {
         }
       )
       .then(results => {
-        let res = results.data;
-        console.log("handleChangeQuantity result", res);
         this.componentDidMount();
+        const tmp_invoice = this.state.invoice;
+        tmp_invoice.items[row].quantity = value;
+        this.setState({
+          invoice: tmp_invoice
+        });
         this.calculateTotal();
       });
   }
 
   render() {
-    console.log("render", this);
     return (
       <div>
         <div>
@@ -246,7 +239,7 @@ class Invoice extends Component {
                 >
                   <BackIcon />
                 </IconButton>
-                <div className={"col-md-2 control-label"}>Edit Invoice</div>
+                <div className={"col-md-2 control-label"}>Edit Invoice # {this.id}</div>
               </legend>
               <div className="form-group">
                 <label className="control-label col-sm-2">Customer</label>
@@ -324,7 +317,7 @@ class Invoice extends Component {
                           id={`sel-${y.id}`}
                           item_id={y.id}
                           value={y.product_id}
-                          onChange={this.handleChangeProduct}
+                          onChange={event => this.handleChangeProduct(event, k)}
                         >
                           <option key={`ddm-i-${0}`} value={null}>
                             Please select product
