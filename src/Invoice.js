@@ -78,6 +78,7 @@ class Invoice extends Component {
               invoice: Object.assign(this.state.invoice, { items: res })
             });
           }
+          return x;
         });
       });
   }
@@ -157,7 +158,6 @@ class Invoice extends Component {
         total: total
       })
       .then(results => {
-        let res = results.data;
         this.setState({
           invoice: Object.assign(results.data, {
             items: this.state.invoice.items
@@ -239,7 +239,9 @@ class Invoice extends Component {
                 >
                   <BackIcon />
                 </IconButton>
-                <div className={"col-md-2 control-label"}>Edit Invoice # {this.id}</div>
+                <div className={"col-md-2 control-label"}>
+                  Edit Invoice # {this.id}
+                </div>
               </legend>
               <div className="form-group">
                 <label className="control-label col-sm-2">Customer</label>
