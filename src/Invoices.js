@@ -98,14 +98,16 @@ class Invoices extends Component {
             <div className="col-md-5">
               <h2>List of invoices</h2>
             </div>
-            <div className="col-md-4">
-              <button
-                className="btn btn-success"
-                style={customButtonStyle}
-                onClick={this.handleAddInvoice}
-              >
-                Add new invoice
-              </button>
+            <div className="col-md-3">
+              <h2>
+                <button
+                  className="btn btn-success"
+                  style={customButtonStyle}
+                  onClick={this.handleAddInvoice}
+                >
+                  Add new invoice
+                </button>
+              </h2>
             </div>
           </div>
         </div>

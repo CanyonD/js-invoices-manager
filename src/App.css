@@ -1,4 +1,8 @@
-.App h2{
+.App {
+  width: 99%;
+}
+
+.App h2 {
   text-align: center;
 }
 
@@ -23,8 +27,12 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .active {
@@ -39,5 +47,4 @@ table td {
 .form-horizontal .form-group {
   margin-left: 0px;
   margin-right: 0px;
- 
 }
