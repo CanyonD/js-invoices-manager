@@ -256,14 +256,13 @@ class Invoice extends Component {
                     <option key={`ddm-i-${0}`} value={0}>
                       Please select customer
                     </option>
-                    {this.state.customers.map((x, y) => (
+                    {this.state.customers.map((x, y) =>
                       <option key={`ddm-i-${x.id}`} value={x.id}>
                         {x.name}
                       </option>
-                    ))}
+                    )}
                   </select>
                 </div>
-
                 <label className="control-label col-sm-1">Discount</label>
                 <div className="col-md-1">
                   <input
@@ -275,13 +274,8 @@ class Invoice extends Component {
                   />
                 </div>
                 <label className="control-label col-sm-2">Total</label>
-                <div className="col-md-1">
-                  <input
-                    type="text"
-                    readOnly="readonly"
-                    className="form-control"
-                    value={this.state.invoice.total}
-                  />
+                <div className="col-md-1 big-size">
+                  {Math.round(parseFloat(this.state.invoice.total) * 100) / 100}
                 </div>
               </div>
             </fieldset>
@@ -310,9 +304,11 @@ class Invoice extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.invoice.items.map((y, k) => (
+                  {this.state.invoice.items.map((y, k) =>
                     <tr key={k}>
-                      <td>{y.id}</td>
+                      <td>
+                        {y.id}
+                      </td>
                       <td>
                         <select
                           className="form-control"
@@ -324,14 +320,16 @@ class Invoice extends Component {
                           <option key={`ddm-i-${0}`} value={null}>
                             Please select product
                           </option>
-                          {this.state.products.map((x, y) => (
+                          {this.state.products.map((x, y) =>
                             <option key={`ddm-i-${y}`} value={y}>
                               {x.name}
                             </option>
-                          ))}
+                          )}
                         </select>
                       </td>
-                      <td className="text-center">{y.price}</td>
+                      <td className="text-center">
+                        {y.price}
+                      </td>
                       <td className="text-center">
                         <input
                           type="text"
@@ -339,8 +337,7 @@ class Invoice extends Component {
                           value={y.quantity}
                           item_id={y.id}
                           onChange={event =>
-                            this.handleChangeQuantity(event, k)
-                          }
+                            this.handleChangeQuantity(event, k)}
                         />
                       </td>
                       <th>
@@ -353,7 +350,7 @@ class Invoice extends Component {
                         </button>
                       </th>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>

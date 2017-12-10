@@ -44,6 +44,11 @@ table td {
   vertical-align: middle !important;
 }
 
+.big-size {
+  font-size: 24px;
+  font-weight: bold;
+}
+
 .form-horizontal .form-group {
   margin-left: 0px;
   margin-right: 0px;
