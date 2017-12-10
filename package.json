@@ -25,7 +25,7 @@
     "sqlite3": "^3.1.13"
   },
   "scripts": {
-    "start": "npm-run-all --parallel web-server api-server",
+    "start": "npm-run-all --parallel api-server web-server",
     "web-server": "set PORT=3001 && react-scripts start",
     "api-server": "node server/",
     "build": "react-scripts build",
