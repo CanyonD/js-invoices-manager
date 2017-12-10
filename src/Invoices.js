@@ -57,6 +57,10 @@ class Invoices extends Component {
   componentDidMount() {
     axios.get("http://localhost:8800/api/invoices").then(results => {
       let res = results.data;
+      if (res.length === 0)
+      this.setState({
+        invoices: []
+      });
       results.data.map((x, y) => {
         if (x.customer_id !== 0 && x.customer_id !== null) {
           res[y].customer = this.state.customers.find(
