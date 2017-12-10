@@ -96,34 +96,36 @@ class Invoices extends Component {
 
   render() {
     return (
-      <div className="form-horizontal">
-        <div className="form-group">
-          <div className="row">
-            <div className="col-md-5">
-              <h2>List of invoices</h2>
-            </div>
-            <div className="col-md-3">
-              <h2>
-                <button
-                  className="btn btn-success"
-                  style={customButtonStyle}
-                  onClick={this.handleAddInvoice}
-                >
-                  Add new invoice
-                </button>
-              </h2>
-            </div>
-          </div>
-        </div>
+      <div>
         {this.state.invoices.length === 0
           ? <Invoice {...this.props} />
-          : <Grid
-              {...this.props}
-              header={model}
-              data={this.state.invoices}
-              handleEdit={this.handleEdit}
-              handleRemove={this.handleRemove}
-            />}
+          : <div className="form-horizontal">
+              <div className="form-group">
+                <div className="row">
+                  <div className="col-md-5">
+                    <h2>List of invoices</h2>
+                  </div>
+                  <div className="col-md-3">
+                    <h2>
+                      <button
+                        className="btn btn-success"
+                        style={customButtonStyle}
+                        onClick={this.handleAddInvoice}
+                      >
+                        Add new invoice
+                      </button>
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <Grid
+                {...this.props}
+                header={model}
+                data={this.state.invoices}
+                handleEdit={this.handleEdit}
+                handleRemove={this.handleRemove}
+              />
+            </div>}
       </div>
     );
   }
